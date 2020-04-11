@@ -19,7 +19,7 @@ class CategoryTVCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        categoryColor.layer.cornerRadius = categoryColor.frame.size.height/5
+        categoryColor.layer.cornerRadius = categoryColor.frame.size.height/3
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
