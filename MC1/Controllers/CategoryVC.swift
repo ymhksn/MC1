@@ -42,6 +42,7 @@ class CategoryVC: UIViewController {
         saveCategory()
         */
         
+
         loadCategory()
     }
     
@@ -69,6 +70,10 @@ class CategoryVC: UIViewController {
         requestCheck.predicate = checkPredicate
         requestUncheck.predicate = uncheckPredicate
         
+        //Sort Data
+        let sortCheckPredicate = NSSortDescriptor(key: "color", ascending: false)
+        requestCheck.sortDescriptors = [sortCheckPredicate]
+        
         do {
             selectedCategories = try context.fetch(requestCheck)
             categories = try context.fetch(requestUncheck)
@@ -95,16 +100,61 @@ extension CategoryVC: UITableViewDataSource{
         return categoryRow
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> (UITableViewCell) {
+        var cell = tableView.dequeueReusableCell(withIdentifier: "reusableTVCell", for: indexPath) as! CategoryTVCell
+//        cell1.categoryColor.backgroundColor = UIColor.init(named: "red1")
+        
         //Populate two tables at the same time
-        var cell = UITableViewCell()
         switch tableView {
         case selectedCategoryTableView:
             cell = tableView.dequeueReusableCell(withIdentifier: "reusableTVCell", for: indexPath) as! CategoryTVCell
+            //update title
             cell.textLabel?.text = selectedCategories[indexPath.row].name
+            cell.textLabel?.textColor = UIColor(displayP3Red: 255, green: 255, blue: 255, alpha: 1)
+
+            //color switcher
+            let colorSwitcher = selectedCategories[indexPath.row].color
+            switch colorSwitcher {
+            case "red1":
+                cell.categoryColor.backgroundColor = UIColor(named: "red1")
+            case "red2":
+                cell.categoryColor.backgroundColor = UIColor(named: "red2")
+            case "red3":
+                cell.categoryColor.backgroundColor = UIColor(named: "red3")
+            case "green1":
+                cell.categoryColor.backgroundColor = UIColor(named: "green1")
+            case "green2":
+                cell.categoryColor.backgroundColor = UIColor(named: "green2")
+            case "green3":
+                cell.categoryColor.backgroundColor = UIColor(named: "green3")
+            case "green4":
+                cell.categoryColor.backgroundColor = UIColor(named: "green4")
+            case "green5":
+                cell.categoryColor.backgroundColor = UIColor(named: "green5")
+            case "green6":
+                cell.categoryColor.backgroundColor = UIColor(named: "green6")
+            case "green7":
+                cell.categoryColor.backgroundColor = UIColor(named: "green7")
+            default:
+                cell.categoryColor.backgroundColor = UIColor(named: "Light Gray Color")
+            }
+
+            //icon switcher
+            let iconSwitcher = selectedCategories[indexPath.row].checked
+            switch iconSwitcher {
+            case "check":
+                cell.categorySelectIcon.image = UIImage(systemName: "xmark")
+            case "unchek":
+                cell.categorySelectIcon.image = UIImage(systemName: "plus")
+            default:
+                print("error")
+            }
+
         case categoryTableView :
             cell = tableView.dequeueReusableCell(withIdentifier: "reusableTVCell", for: indexPath) as! CategoryTVCell
-            cell.textLabel?.text = categories[indexPath.row].name
+            cell.categoryTitle.text = categories[indexPath.row].name
+            cell.categoryTitle.tintColor = UIColor(displayP3Red: 255, green: 255, blue: 255, alpha: 1)
+            cell.categorySelectIcon.tintColor = UIColor(displayP3Red: 255, green: 255, blue: 255, alpha: 1)
         default:
             print("Can not populate row from array")
         }
@@ -120,6 +170,7 @@ extension CategoryVC: UITableViewDelegate{
         if tableView == selectedCategoryTableView {
             selectedCategories[indexPath.row].checked = "uncheck"
             selectedCategories.remove(at: indexPath.row)
+            
         } else if tableView == categoryTableView{
             categories[indexPath.row].checked = "check"
             categories.remove(at: indexPath.row)
