@@ -19,6 +19,7 @@ class CategoryVC: UIViewController {
     //var to store data from CoreData DB temp
     var selectedCategories = [Category]()
     var categories = [Category]()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,10 +43,9 @@ class CategoryVC: UIViewController {
         */
         
         loadCategory()
-        
     }
     
-//MARK: - CoreData Func
+    //MARK: - CoreData Func
     //CoreData Create
     func saveCategory() {
         do {
@@ -53,6 +53,7 @@ class CategoryVC: UIViewController {
         } catch {
             print("Error saving to DB \(error)")
         }
+        
     }
     
     //CoreData Read
@@ -67,13 +68,14 @@ class CategoryVC: UIViewController {
         
         requestCheck.predicate = checkPredicate
         requestUncheck.predicate = uncheckPredicate
-  
+        
         do {
             selectedCategories = try context.fetch(requestCheck)
             categories = try context.fetch(requestUncheck)
         } catch {
             print("Error loading from DB \(error)")
         }
+        
     }
 }
 
@@ -81,7 +83,7 @@ class CategoryVC: UIViewController {
 extension CategoryVC: UITableViewDataSource{
     func tableView(_ tableView: UITableView,  numberOfRowsInSection section: Int) -> Int {
         //Populate two tables at the same time
-        var categoryRow = 1
+        var categoryRow = 0
         switch tableView {
         case selectedCategoryTableView:
             categoryRow = selectedCategories.count
@@ -112,27 +114,22 @@ extension CategoryVC: UITableViewDataSource{
 
 //MARK: - TableView Delegate
 extension CategoryVC: UITableViewDelegate{
+    //update category from user click
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
-        switch tableView {
-        case selectedCategoryTableView:
-            if selectedCategories[indexPath.row].checked == "check"{
-                selectedCategories[indexPath.row].checked = "uncheck"
-            }
-         
-        case categoryTableView :
-            if categories[indexPath.row].checked == "uncheck" {
-                categories[indexPath.row].checked = "check"
-            }
-        default:
-            print("Can not populate row from array")
+        
+        if tableView == selectedCategoryTableView {
+            selectedCategories[indexPath.row].checked = "uncheck"
+            selectedCategories.remove(at: indexPath.row)
+        } else if tableView == categoryTableView{
+            categories[indexPath.row].checked = "check"
+            categories.remove(at: indexPath.row)
         }
         
         saveCategory()
-        
+        loadCategory()
         tableView.deselectRow(at: indexPath, animated: true)
-        tableView.reloadData()
-        
-        
+        categoryTableView.reloadData()
+        selectedCategoryTableView.reloadData()
     }
 }
+
