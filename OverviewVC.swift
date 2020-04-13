@@ -14,17 +14,19 @@ private let reuseIdentifier = "categoryCV"
 class OverviewVC: UIViewController{
     @IBOutlet weak var workLifeBalancer: UISlider!
     @IBOutlet weak var selectedCategoryCollectionView: UICollectionView!
-    
+        
     //CoreData
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var categories = [Category]()
-    var userSelectedActivityIndexPath = 0
+    var userSelectedActivityIndexPath = Int()
   
     override func viewDidLoad() {
         super.viewDidLoad()
         workLifeBalancer.setThumbImage(UIImage(), for: .normal)
-        navigationController?.isNavigationBarHidden = true
         
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+
+
         //DataSource & Delegate Protocol
         selectedCategoryCollectionView.dataSource = self
         selectedCategoryCollectionView.delegate = self
@@ -34,8 +36,25 @@ class OverviewVC: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        navigationController?.isNavigationBarHidden = true
         loadCategory()
         selectedCategoryCollectionView.reloadData()
+        
+        //Piechart UIBezierPath
+        let width: CGFloat = 350
+        let height: CGFloat = 350
+        
+        let pieChart = Piechart(frame: CGRect(x: self.view.frame.size.width/2 - width/2,
+                                              y: self.view.frame.size.height/2 - height/1.6,
+                                              width: width,
+                                              height: height))
+        
+        self.view.addSubview(pieChart)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        navigationController?.isNavigationBarHidden = false
     }
     
     //MARK: - CoreData Func
@@ -129,8 +148,8 @@ extension OverviewVC: UICollectionViewDelegate{
             //assign the value from this VC to destinationVC and get the method & properties of destinationVC
             let destinationVC = segue.destination as? ActivityVC
             destinationVC?.selectedActivity = categories[userSelectedActivityIndexPath]
+            print(userSelectedActivityIndexPath)
         }
-            
     }
 }
 

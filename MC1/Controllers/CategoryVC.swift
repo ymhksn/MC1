@@ -35,13 +35,13 @@ class CategoryVC: UIViewController {
         selectedCategoryTableView.register(UINib(nibName: "CategoryTVCell", bundle: nil), forCellReuseIdentifier: "reusableTVCell")
         categoryTableView.register(UINib(nibName: "CategoryTVCell", bundle: nil), forCellReuseIdentifier: "reusableTVCell")
         
-        /*
+
         //Save data to CoreData
         let categories = Category(context: context)
-        categories.name = "Work"
-        categories.color = "red1"
+        categories.name = "Sleep"
+        categories.color = "green7"
         saveCategory()
-        */
+        
         
 
         loadCategory()
