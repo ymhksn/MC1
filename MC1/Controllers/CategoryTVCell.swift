@@ -20,8 +20,6 @@ class CategoryTVCell: UITableViewCell {
         // Initialization code
         
         categoryColor.layer.cornerRadius = categoryColor.frame.size.height/3
-//        categoryColor.backgroundColor = UIColor.init(named: "red1")
-//        categorySelectIcon.image = UIImage(systemName: "xmark")
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

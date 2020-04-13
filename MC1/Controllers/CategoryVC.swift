@@ -14,6 +14,7 @@ class CategoryVC: UIViewController {
     @IBOutlet weak var selectedCategoryTableView: UITableView!
     @IBOutlet weak var categoryTableView: UITableView!
     
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     //var to store data from CoreData DB temp
@@ -80,7 +81,10 @@ class CategoryVC: UIViewController {
         } catch {
             print("Error loading from DB \(error)")
         }
-        
+    }
+    
+    @IBAction func doneAddActivityPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -183,4 +187,3 @@ extension CategoryVC: UITableViewDelegate{
         selectedCategoryTableView.reloadData()
     }
 }
-
